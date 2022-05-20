@@ -1,10 +1,10 @@
 import { onValue, ref, set } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import Image from './astronauta.jpeg';
 import Auth from './Auth';
 import { database } from './firebase';
 import useCurrentUser from './useCurrentUser';
-import Image from './astronauta.jpeg'
 
 function randomIntFromInterval(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -25,12 +25,12 @@ function App() {
   }
 
   const pickRock = () => {
-    const pickedRock = randomIntFromInterval(0, unpicked.length - 1)
-    addPickedRock(unpicked[pickedRock])
+    const pickIndex = randomIntFromInterval(0, unpicked.length - 1)
+    addPickedRock(unpicked[pickIndex])
     setSubmitDisabled(true)
     setTimeout(() => {
       setSubmitDisabled(false)
-    }, 2000)
+    }, 1000)
   }
 
   useEffect(() => {
