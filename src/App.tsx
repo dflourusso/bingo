@@ -54,7 +54,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <img src={Image}></img>
+        <img alt="Logo" src={Image}></img>
         <h2>Bingo do Felipe</h2>
       </header>
 
