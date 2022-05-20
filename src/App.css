@@ -46,7 +46,7 @@
   min-height: 5em;
 }
 
-.pick-button {
+.button {
   color: #fff;
   border-color: #fff;
   border-width: 1px;
@@ -58,7 +58,7 @@
   margin-bottom: 1em;
 }
 
-.pick-button:disabled {
+.button:disabled {
   color: gray;
   border-color: gray;
 }

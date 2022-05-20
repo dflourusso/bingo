@@ -1,6 +1,6 @@
 {
   "hosting": {
     "site": "bingo-felipe",
-    "public": "public"
+    "public": "build"
   }
 }

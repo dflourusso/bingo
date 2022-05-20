@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import { onValue, ref, set } from 'firebase/database';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import Auth from './Auth';
+import { database } from './firebase';
+import useCurrentUser from './useCurrentUser';
 
 function randomIntFromInterval(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -8,13 +12,14 @@ function randomIntFromInterval(min: number, max: number): number {
 const allRocks = Array(75).fill(null).map((_, index) => index + 1)
 
 function App() {
+  const user = useCurrentUser()
   const [pickedRocks, setPickedRocks] = useState<number[]>([])
-  const unpicked = allRocks.filter(p => !pickedRocks.includes(p))
-  const lastPicked = pickedRocks.slice(0, 3)
+  const unpicked = allRocks.filter(p => !pickedRocks?.includes(p)) ?? []
+  const lastPicked = pickedRocks?.slice(0, 3) ?? []
   const [submitDisabled, setSubmitDisabled] = useState(false)
 
   const addPickedRock = (rock: number) => {
-    setPickedRocks(p => [rock, ...p])
+    set(ref(database, 'game'), [rock, ...pickedRocks]);
   }
 
   const pickRock = () => {
@@ -26,14 +31,35 @@ function App() {
     }, 2000)
   }
 
+  useEffect(() => {
+    const unsubscribe = onValue(ref(database, 'game'), (snapshot) => {
+      if (snapshot) {
+        const data = snapshot.val();
+        if (data) setPickedRocks(data);
+      }
+    });
+    return () => {
+      unsubscribe()
+    }
+  }, [])
+
+  const resetGame = () => {
+    if (window.confirm('Tem certeza que deseja redefinir o jogo?')) {
+      set(ref(database, 'game'), []);
+      setPickedRocks([])
+    }
+  }
+
   return (
     <div className="App">
-      <button className='pick-button' disabled={submitDisabled || unpicked.length === 0} onClick={pickRock}>Sortear nova pedra</button>
+      {Boolean(user) &&
+        <button className='button' disabled={submitDisabled || unpicked.length === 0} onClick={pickRock}>Sortear nova pedra</button>
+      }
       <div className='last-picked-container'>
 
         {lastPicked.length > 0 && <p>Últimas pedras sorteadas: </p>}
         <div className='rocks-table'>
-          {lastPicked.map((rock, index) => {
+          {lastPicked?.map((rock, index) => {
             return <div key={rock} className={index === 0 ? 'last-active' : "active"}>
               <span >{rock}</span>
             </div>
@@ -42,12 +68,16 @@ function App() {
       </div>
       <div className='divider'></div>
       <div className='rocks-table'>
-        {allRocks.map((rock) => {
-          return <div key={rock} className={pickedRocks.includes(rock) ? 'active' : ""}>
+        {allRocks?.map((rock) => {
+          return <div key={rock} className={pickedRocks?.includes(rock) ? 'active' : ""}>
             <span>{rock}</span>
           </div>
         })}
       </div>
+      <Auth />
+      {Boolean(user) &&
+        <button className='button' onClick={resetGame}>Redefinir o jogo</button>
+      }
     </div>
   );
 }
