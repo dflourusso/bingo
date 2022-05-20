@@ -34,8 +34,8 @@ function App() {
         {lastPicked.length > 0 && <p>Últimas pedras sorteadas: </p>}
         <div className='rocks-table'>
           {lastPicked.map((rock, index) => {
-            return <div className={index === 0 ? 'last-active' : "active"}>
-              <span key={rock}>{rock}</span>
+            return <div key={rock} className={index === 0 ? 'last-active' : "active"}>
+              <span >{rock}</span>
             </div>
           })}
         </div>
@@ -43,8 +43,8 @@ function App() {
       <div className='divider'></div>
       <div className='rocks-table'>
         {allRocks.map((rock) => {
-          return <div className={pickedRocks.includes(rock) ? 'active' : ""}>
-            <span key={rock}>{rock}</span>
+          return <div key={rock} className={pickedRocks.includes(rock) ? 'active' : ""}>
+            <span>{rock}</span>
           </div>
         })}
       </div>
