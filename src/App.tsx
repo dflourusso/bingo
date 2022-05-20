@@ -11,6 +11,7 @@ function randomIntFromInterval(min: number, max: number): number {
 }
 
 const allRocks = Array(75).fill(null).map((_, index) => index + 1)
+const allowedWriteEmail = 'dflourusso@gmail.com'
 
 function App() {
   const user = useCurrentUser()
@@ -36,7 +37,7 @@ function App() {
     const unsubscribe = onValue(ref(database, 'game'), (snapshot) => {
       if (snapshot) {
         const data = snapshot.val();
-        setPickedRocks(data??[]);
+        setPickedRocks(data ?? []);
       }
     });
     return () => {
@@ -58,7 +59,7 @@ function App() {
         <h2>Bingo do Felipe</h2>
       </header>
 
-      {Boolean(user) &&
+      {user?.email === allowedWriteEmail &&
         <button className='button' disabled={submitDisabled || unpicked.length === 0} onClick={pickRock}>Sortear nova pedra</button>
       }
       <div className='last-picked-container'>
@@ -81,7 +82,7 @@ function App() {
         })}
       </div>
       <Auth />
-      {Boolean(user) &&
+      {user?.email === allowedWriteEmail &&
         <button className='button' onClick={resetGame}>Redefinir o jogo</button>
       }
     </div>

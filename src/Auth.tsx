@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import React from 'react';
 import { auth } from './firebase';
 import useCurrentUser from './useCurrentUser';
@@ -13,7 +13,13 @@ const Auth: React.FC = () => {
 
   return <div className='auth-container'>
     {!user && <button className='button' onClick={signInWithGoogle}>SignIn</button>}
-    {Boolean(user) && <div >{user?.email}</div>}
+    {Boolean(user) && <div>
+      <button className="button" onClick={() => signOut(auth)}>Sair</button>
+      <p>
+        {user?.email}
+      </p>
+    </div>
+    }
   </div>
 }
 
