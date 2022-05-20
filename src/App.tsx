@@ -4,6 +4,7 @@ import './App.css';
 import Auth from './Auth';
 import { database } from './firebase';
 import useCurrentUser from './useCurrentUser';
+import Image from './astronauta.jpeg'
 
 function randomIntFromInterval(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -52,6 +53,11 @@ function App() {
 
   return (
     <div className="App">
+      <header>
+        <img src={Image}></img>
+        <h2>Bingo do Felipe</h2>
+      </header>
+
       {Boolean(user) &&
         <button className='button' disabled={submitDisabled || unpicked.length === 0} onClick={pickRock}>Sortear nova pedra</button>
       }

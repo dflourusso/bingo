@@ -10,6 +10,14 @@
   padding: 1em;
 }
 
+.App header {
+  padding-bottom: 2em;
+}
+.App header img {
+  border-radius: 50%;
+  max-width: 5em;
+}
+
 .rocks-table {
   display: flex;
   flex-wrap: wrap;
@@ -68,4 +76,8 @@
   height: 1px;
   background-color: gray;
   margin-bottom: 1em;
+}
+
+.auth-container {
+  padding: 2em;
 }

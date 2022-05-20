@@ -11,8 +11,8 @@ const signInWithGoogle = () => signInWithPopup(auth, provider);
 const Auth: React.FC = () => {
   const user = useCurrentUser()
 
-  return <div>
-    {!user && <div onClick={signInWithGoogle}>SignIn</div>}
+  return <div className='auth-container'>
+    {!user && <button className='button' onClick={signInWithGoogle}>SignIn</button>}
     {Boolean(user) && <div >{user?.email}</div>}
   </div>
 }
