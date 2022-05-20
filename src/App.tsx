@@ -35,7 +35,7 @@ function App() {
     const unsubscribe = onValue(ref(database, 'game'), (snapshot) => {
       if (snapshot) {
         const data = snapshot.val();
-        if (data) setPickedRocks(data);
+        setPickedRocks(data??[]);
       }
     });
     return () => {
