@@ -4,6 +4,7 @@ import './App.css';
 import Image from './astronauta.jpeg';
 import Auth from './Auth';
 import { database } from './firebase';
+import jokes from './jokes';
 import useCurrentUser from './useCurrentUser';
 
 function randomIntFromInterval(min: number, max: number): number {
@@ -19,6 +20,9 @@ function App() {
   const unpicked = allRocks.filter(p => !pickedRocks?.includes(p)) ?? []
   const lastPicked = pickedRocks?.slice(0, 3) ?? []
   const [submitDisabled, setSubmitDisabled] = useState(false)
+  const isOwner = user?.email === allowedWriteEmail
+  const lastRock = lastPicked[0]
+  const joke = jokes[lastRock]
 
   const addPickedRock = (rock: number) => {
     set(ref(database, 'game'), [rock, ...pickedRocks]);
@@ -59,20 +63,18 @@ function App() {
         <h2>Bingo do Felipe</h2>
       </header>
 
-      {user?.email === allowedWriteEmail &&
+      {isOwner &&
         <button className='button' disabled={submitDisabled || unpicked.length === 0} onClick={pickRock}>Sortear nova pedra</button>
       }
-      <div className='last-picked-container'>
-
-        {lastPicked.length > 0 && <p>Últimas pedras sorteadas: </p>}
-        <div className='rocks-table'>
-          {lastPicked?.map((rock, index) => {
-            return <div key={rock} className={index === 0 ? 'last-active' : "active"}>
-              <span >{rock}</span>
-            </div>
-          })}
-        </div>
+      {lastPicked.length > 0 && <p>Últimas pedras sorteadas: </p>}
+      <div className='rocks-table'>
+        {lastPicked?.map((rock, index) => {
+          return <div key={rock} className={index === 0 ? 'last-active' : "active"}>
+            <span >{rock}</span>
+          </div>
+        })}
       </div>
+      {Boolean(joke) && <small className='joke'>{joke}</small>}
       <div className='divider'></div>
       <div className='rocks-table'>
         {allRocks?.map((rock) => {
@@ -82,7 +84,7 @@ function App() {
         })}
       </div>
       <Auth />
-      {user?.email === allowedWriteEmail &&
+      {isOwner &&
         <button className='button' onClick={resetGame}>Redefinir o jogo</button>
       }
     </div>
