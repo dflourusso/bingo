@@ -74,7 +74,7 @@ function App() {
           </div>
         })}
       </div>
-      {Boolean(joke) && <small className='joke'>{joke}</small>}
+      {isOwner && Boolean(joke) && <small className='joke'>{joke}</small>}
       <div className='divider'></div>
       <div className='rocks-table'>
         {allRocks?.map((rock) => {
