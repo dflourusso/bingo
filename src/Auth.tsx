@@ -1,7 +1,7 @@
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import React from 'react';
 import { auth } from './firebase';
-import useCurrentUser from './useCurrentUser';
+import useCurrentUser from './hooks/useCurrentUser';
 
 const provider = new GoogleAuthProvider()
 provider.setCustomParameters({ prompt: 'select_account' });

@@ -1,31 +1,40 @@
 import { onValue, ref, set } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import Image from './astronauta.jpeg';
 import Auth from './Auth';
+import Rock from './components/Rock';
+import RockContainer from './components/RockContainer';
 import { database } from './firebase';
+import useGameUid from './hooks/useGameId';
 import jokes from './jokes';
-import useCurrentUser from './useCurrentUser';
+import useCurrentUser from './hooks/useCurrentUser';
 
 function randomIntFromInterval(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 const allRocks = Array(75).fill(null).map((_, index) => index + 1)
-const allowedWriteEmail = 'dflourusso@gmail.com'
 
 function App() {
   const user = useCurrentUser()
+  const uid = useGameUid()
+  const databasePath = `users/${uid}/game`
   const [pickedRocks, setPickedRocks] = useState<number[]>([])
   const unpicked = allRocks.filter(p => !pickedRocks?.includes(p)) ?? []
   const lastPicked = pickedRocks?.slice(0, 3) ?? []
   const [submitDisabled, setSubmitDisabled] = useState(false)
-  const isOwner = user?.email === allowedWriteEmail
+  const isOwner = user?.uid === uid
   const lastRock = lastPicked[0]
   const joke = jokes[lastRock]
 
+  useEffect(() => {
+    if (!uid && user?.uid) {
+      window.location.search = `uid=${user?.uid}`
+    }
+  }, [uid, user])
+
   const addPickedRock = (rock: number) => {
-    set(ref(database, 'game'), [rock, ...pickedRocks]);
+    set(ref(database, databasePath), [rock, ...pickedRocks]);
   }
 
   const pickRock = () => {
@@ -38,7 +47,7 @@ function App() {
   }
 
   useEffect(() => {
-    const unsubscribe = onValue(ref(database, 'game'), (snapshot) => {
+    const unsubscribe = onValue(ref(database, databasePath), (snapshot) => {
       if (snapshot) {
         const data = snapshot.val();
         setPickedRocks(data ?? []);
@@ -47,11 +56,11 @@ function App() {
     return () => {
       unsubscribe()
     }
-  }, [])
+  }, [databasePath])
 
   const resetGame = () => {
     if (window.confirm('Tem certeza que deseja redefinir o jogo?')) {
-      set(ref(database, 'game'), []);
+      set(ref(database, databasePath), []);
       setPickedRocks([])
     }
   }
@@ -59,30 +68,27 @@ function App() {
   return (
     <div className="App">
       <header>
-        <img alt="Logo" src={Image}></img>
-        <h2>Bingo do Felipe</h2>
+        <h2>Bingo</h2>
       </header>
 
       {isOwner &&
         <button className='button' disabled={submitDisabled || unpicked.length === 0} onClick={pickRock}>Sortear nova pedra</button>
       }
-      {lastPicked.length > 0 && <p>Últimas pedras sorteadas: </p>}
-      <div className='rocks-table'>
-        {lastPicked?.map((rock, index) => {
-          return <div key={rock} className={index === 0 ? 'last-active' : "active"}>
-            <span >{rock}</span>
-          </div>
-        })}
+      <div className='last-picked-container'>
+        {lastPicked.length > 0 && <p>Últimas pedras sorteadas: </p>}
+        <RockContainer>
+          {lastPicked?.map((rock, index) => {
+            return <Rock key={rock} rock={rock} active={true} highlight={index === 0}></Rock>
+          })}
+        </RockContainer>
       </div>
       {isOwner && Boolean(joke) && <small className='joke'>{joke}</small>}
       <div className='divider'></div>
-      <div className='rocks-table'>
+      <RockContainer>
         {allRocks?.map((rock) => {
-          return <div key={rock} className={pickedRocks?.includes(rock) ? 'active' : ""}>
-            <span>{rock}</span>
-          </div>
+          return <Rock key={rock} rock={rock} active={pickedRocks?.includes(rock)}></Rock>
         })}
-      </div>
+      </RockContainer>
       <Auth />
       {isOwner &&
         <button className='button' onClick={resetGame}>Redefinir o jogo</button>
