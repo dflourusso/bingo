@@ -82,7 +82,6 @@ const Game = () => {
         <p>{user?.email}</p>
         <div className='game-footer-actions'>
           <Link to='/' className='button'>Voltar</Link>
-          <Button onClick={resetGame}>Compartilhar jogo</Button>
           {isOwner &&
             <Button onClick={resetGame}>Redefinir jogo</Button>
           }
