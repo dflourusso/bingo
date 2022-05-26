@@ -2,7 +2,6 @@ import { onValue, ref, set } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import Auth from '../components/Auth';
 import Button from '../components/Button';
 import Rock from '../components/Rock';
 import RockContainer from '../components/RockContainer';
