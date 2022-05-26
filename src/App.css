@@ -1,4 +1,4 @@
-.App {
+.center-screen {
   text-align: center;
   min-height: 100vh;
   display: flex;
@@ -10,37 +10,37 @@
   padding: 1em;
 }
 
-.App header {
-  padding-bottom: 1em;
-}
-.App header img {
-  border-radius: 50%;
-  max-width: 5em;
-}
 
 .last-picked-container {
   min-height: 5em;
+  padding-top: 0.5em;
 }
 
 .joke {
   color: silver;
 }
 
-.button {
-  color: #fff;
-  border-color: #fff;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: 0.3em;
-  background-color: transparent;
-  padding: 0.6em;
-  font-size: 0.8em;
-  margin-bottom: 1em;
+
+
+.game-footer {
+  padding-top: 1em;
 }
 
-.button:disabled {
-  color: gray;
-  border-color: gray;
+.game-footer-actions {
+  display: flex;
+  flex-direction: row;
+  width: 50vw;
+  justify-content: space-around;
+  padding-top: 1em;
+}
+
+@media only screen and (max-width: 600px) {
+  .game-footer-actions {
+    flex-direction: column;
+  }
+  .game-footer-actions button, a {
+    margin-bottom: 1em;
+  }
 }
 
 .divider {
@@ -51,6 +51,52 @@
   margin-top: 1em;
 }
 
-.auth-container {
-  padding: 2em;
+
+.home-content {
+  padding: 1em;
+}
+
+.home-info {
+  padding-top: 1em;
+}
+
+.home-divider {
+  width: 50%;
+  background-color: #fff;
+  height: 1px;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.home-input-group {
+  padding-bottom: 1em;
+}
+
+input[type=text] {
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  background-color: #3c3f48;
+  color: #fff;
+  font-size: 0.8em;
+  border: 2px solid #52555c;
+  border-radius: 8px;
+}
+
+.loading {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
 }
